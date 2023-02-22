@@ -13,28 +13,31 @@ namespace CoffeeMachine_Refactored // Note: actual namespace depends on the proj
         static void Main(string[] args)
         {
 
-            CoffeeMachine coffeeMachine = new CoffeeMachine();
+            BeverageMachine beverageMachine = new BeverageMachine();
 
             while (true)
             {
                 try
                 {
-                    coffeeMachine.PourCoffee();
+                    Console.WriteLine("Would you like coffee or soda?\n1.Coffee\n2.Soda");
+                    int userOption = int.Parse(Console.ReadLine());
+                    switch (userOption)
+                    {
+                        case 1:
+                            beverageMachine.PourCoffee();
+                            break;
+                        case 2:
+                            beverageMachine.PourSoda();
+                            break;
+                    }
+                }
+                catch (Exception ex) when (ex is BeverageTypeNotFoundException ||
+                                           ex is IngredientNotFoundException ||
+                                           ex is SizeNotFoundException)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
-                }
-                catch (IngredientNotFoundException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (CoffeeTypeNotFoundException ex)
-                {
-                    Console.WriteLine(ex.Message);
-
-                }
-                catch (SizeNotFoundException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
             }
         }
     }

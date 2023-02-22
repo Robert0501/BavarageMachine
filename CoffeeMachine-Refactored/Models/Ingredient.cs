@@ -14,11 +14,18 @@ namespace CoffeeMachine_Refactored.Models
         private int _actualAmount;
         public int ActualAmount { get { return _actualAmount; } set { _actualAmount = value; } }
         public CoffeeIngredientsType IngredientType;
+        public SodaType sodaType;
 
         public Ingredient(CoffeeIngredientsType ingredientType)
         {
             ActualAmount = MAX_AMOUNT;
             this.IngredientType = ingredientType;
+        }
+
+        public Ingredient(SodaType sodaType)
+        {
+            ActualAmount = MAX_AMOUNT;
+            this.sodaType = sodaType;
         }
 
         public void FillIngredient()

@@ -11,7 +11,8 @@ namespace CoffeeMachine_Refactored.Controllers
 {
     public class BeverageProccessor : IMachineProcessor
     {
-        private readonly CoffeeProccessor? coffeeProccessor;
+        private readonly CoffeeProccessor coffeeProccessor;
+        private readonly SodaProcessor sodaProcessor;
 
         public BeverageProccessor()
         {
@@ -26,6 +27,9 @@ namespace CoffeeMachine_Refactored.Controllers
                 case BeverageType.Coffee:
                     coffeeProccessor = new CoffeeProccessor();
                     break;
+                case BeverageType.Soda:
+                    sodaProcessor = new SodaProcessor();
+                    break;
             }
         }
 
@@ -39,6 +43,12 @@ namespace CoffeeMachine_Refactored.Controllers
                     coffeeProccessor.AskForPayment();
                     coffeeProccessor.Pour();
                     coffeeProccessor.showActualIngredientAmount();
+                    break;
+                case BeverageType.Soda:
+                    sodaProcessor.AskForBeverage();
+                    sodaProcessor.GetReceipt();
+                    sodaProcessor.AskForPayment();
+                    sodaProcessor.Pour();
                     break;
             }
         }

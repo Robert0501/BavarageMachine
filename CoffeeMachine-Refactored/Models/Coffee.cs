@@ -1,5 +1,6 @@
 ﻿using CoffeeMachine_Refactored.Enums;
 using CoffeeMachine_Refactored.Exceptions;
+using CoffeeMachine_Refactored.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,28 +11,35 @@ using System.Threading.Tasks;
 
 namespace CoffeeMachine_Refactored.Models
 {
-    public class Coffee : Beverage
+    public class Coffee : IBeverage
     {
 
         private CoffeeType _coffeeType;
         public CoffeeType CoffeeType { get { return _coffeeType; } set { _coffeeType = value; } }
 
+        private SizeType _sizeType;
+        public SizeType SizeType { get { return _sizeType; } set { _sizeType = value; } }
+
+        private int _basePrice;
+        public int BasePrice { get { return _basePrice; } set { _basePrice = value; } }
+
         public List<CoffeeIngredientsType> Ingredients;
 
 
-        public Coffee() : base()
+        public Coffee() 
         {
             Ingredients = new List<CoffeeIngredientsType>();
         }
 
-        public Coffee(BeverageType beverageType, CoffeeType coffeeType, SizeType size) : base(beverageType, size)
+        public Coffee(CoffeeType coffeeType, SizeType size)
         {
             this.BasePrice = 10;
             this.CoffeeType = coffeeType;
+            this.SizeType = size;
             Ingredients = new List<CoffeeIngredientsType>();
         }
 
-        public override void GetReceipt()
+        public void GetReceipt()
         {
             switch (CoffeeType)
             {
@@ -51,7 +59,7 @@ namespace CoffeeMachine_Refactored.Models
                     this.Ingredients.Add(CoffeeIngredientsType.Coffee);
                     this.Ingredients.Add(CoffeeIngredientsType.Sugar);
                     break;
-                default: throw new CoffeeTypeNotFoundException("We don't have that type of coffee\n");
+                default: throw new BeverageTypeNotFoundException("We don't have that type of coffee\n");
             }
 
         }
@@ -67,13 +75,13 @@ namespace CoffeeMachine_Refactored.Models
             return neededIngredients;
         }
 
-        public override int GetUsedIngredientsNumber()
+        public int GetUsedIngredientsNumber()
         {
-           
+
             return this.Ingredients.Count();
         }
 
-        public override double BeveragePrice()
+        public double BeveragePrice()
         {
             int numberOfIngredients = GetUsedIngredientsNumber();
             return this.BasePrice + (0.1 * BasePrice * numberOfIngredients * (double)this.SizeType);

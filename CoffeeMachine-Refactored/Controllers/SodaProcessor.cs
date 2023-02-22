@@ -5,39 +5,62 @@ using CoffeeMachine_Refactored.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CoffeeMachine_Refactored.Controllers
 {
-    public class CoffeeProccessor : IBeverageProcessor
+    public class SodaProcessor : IBeverageProcessor
     {
         private List<Ingredient> ingredients;
-        private Coffee? coffee;
-
+        private Soda? soda;
 
         private void addAllIngredientsToTheList(List<Ingredient> list)
         {
-            foreach (int ingredients in Enum.GetValues(typeof(CoffeeIngredientsType)))
+            foreach (int ingredients in Enum.GetValues(typeof(SodaType)))
             {
-                list.Add(new Ingredient((CoffeeIngredientsType)ingredients));
+                list.Add(new Ingredient((SodaType)ingredients));
 
             }
         }
 
-        public CoffeeProccessor()
+        public SodaProcessor()
         {
-            ingredients = new List<Ingredient>();
+            ingredients= new List<Ingredient>();
 
             addAllIngredientsToTheList(ingredients);
         }
 
-        public void showActualIngredientAmount()
+        public void AskForBeverage()
         {
-            foreach (Ingredient i in ingredients)
+            Console.WriteLine("Please insert the number of the soda you want:\n" +
+              "1.Coca Cola\n" +
+              "2.Pepsi\n" +
+              "3.Fanta\n" +
+              "4.Sprite");
+
+            var sodaType = SodaType.CocaCola;
+            if (int.TryParse(Console.ReadLine(), out var sodaChoise))
             {
-                Console.WriteLine(i.ActualAmount);
+
+                sodaType = (SodaType)sodaChoise;
+
             }
+
+
+            Console.WriteLine("You choose a " + sodaType.ToString() + " Would you like it to be:" +
+                                        "\n1. Small" +
+                                        "\n2. Medium" +
+                                        "\n3. Large");
+
+            var size = SizeType.Small;
+            if (int.TryParse(Console.ReadLine(), out var sizeChoose))
+            {
+                size = (SizeType)sizeChoose;
+            }
+
+            soda = new Soda(sodaType, size);
         }
 
         private void CheckForIngredients(Ingredient ingredient, SizeType size)
@@ -63,10 +86,7 @@ namespace CoffeeMachine_Refactored.Controllers
                     }
                     break;
             }
-
-
         }
-
         private void UpdateIngredientAmount(Ingredient ingredient, SizeType size)
         {
 
@@ -80,40 +100,9 @@ namespace CoffeeMachine_Refactored.Controllers
             }
         }
 
-        public void AskForBeverage()
-        {
-            Console.WriteLine("Please insert the number of the coffee you want:\n" +
-               "1.Hot Chocolate\n" +
-               "2.Espresso\n" +
-               "3.Irish Coffee");
-
-            var coffeeType = CoffeeType.Espresso;
-            if (int.TryParse(Console.ReadLine(), out var coffeChoise))
-            {
-
-                coffeeType = (CoffeeType)coffeChoise;
-
-            }
-
-
-            Console.WriteLine("You choose a " + coffeeType.ToString() + " Would you like it to be:" +
-                                        "\n1. Small" +
-                                        "\n2. Medium" +
-                                        "\n3. Large");
-
-            var size = SizeType.Small;
-            if (int.TryParse(Console.ReadLine(), out var sizeChoose))
-            {
-                size = (SizeType)sizeChoose;
-            }
-
-            coffee = new Coffee(coffeeType, size);
-
-        }
-
         public void GetReceipt()
         {
-            coffee.GetReceipt();
+            soda.GetReceipt();
         }
 
         public void AskForPayment()
@@ -122,7 +111,7 @@ namespace CoffeeMachine_Refactored.Controllers
 
             double paidAmount = 0;
 
-            Console.Write("Your " + coffee.SizeType + "  " + coffee.CoffeeType + " will be " + price + " lei. Please insert the amount: ");
+            Console.Write("Your " + soda.SizeType + "  " + soda.SodaType + " will be " + price + " lei. Please insert the amount: ");
 
             do
             {
@@ -138,24 +127,17 @@ namespace CoffeeMachine_Refactored.Controllers
                 }
 
             } while (price > paidAmount);
-
         }
 
         public double GetPrice()
         {
-            return coffee.BeveragePrice();
+            return soda.BeveragePrice();
         }
 
         public void Pour()
         {
-
-            foreach (CoffeeIngredientsType ingredientNeeded in coffee.Ingredients)
-            {
-                int index = ingredients.FindIndex(x => x.IngredientType.Equals(ingredientNeeded));
-                UpdateIngredientAmount(ingredients[index], coffee.SizeType);
-            }
-
-
+            UpdateIngredientAmount(ingredients[0], soda.SizeType);
+            
         }
     }
 }
