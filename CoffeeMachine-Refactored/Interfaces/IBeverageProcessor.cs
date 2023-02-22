@@ -13,5 +13,6 @@ namespace CoffeeMachine_Refactored.Interfaces
         void AskForBeverage();
         void AskForPayment();
         void GetReceipt();
+        void showActualIngredientAmount();
     }
 }

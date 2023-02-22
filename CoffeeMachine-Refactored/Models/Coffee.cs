@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +25,7 @@ namespace CoffeeMachine_Refactored.Models
         public List<CoffeeIngredientsType> Ingredients;
 
 
-        public Coffee() 
+        public Coffee()
         {
             Ingredients = new List<CoffeeIngredientsType>();
         }
@@ -75,7 +74,7 @@ namespace CoffeeMachine_Refactored.Models
             var neededIngredients = new List<CoffeeIngredientsType>();
             foreach (CoffeeIngredientsType ingredient in Ingredients)
             {
-                neededIngredients.Append(ingredient);
+                neededIngredients.Add(ingredient);
             }
 
             return neededIngredients;
@@ -87,7 +86,7 @@ namespace CoffeeMachine_Refactored.Models
             return this.Ingredients.Count();
         }
 
-       
+
 
         public override string ToString()
         {

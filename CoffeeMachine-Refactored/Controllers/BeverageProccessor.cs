@@ -1,10 +1,12 @@
-﻿using CoffeeMachine_Refactored.Enums;
+﻿
+using CoffeeMachine_Refactored.Enums;
 using CoffeeMachine_Refactored.Exceptions;
 using CoffeeMachine_Refactored.Interfaces;
 using CoffeeMachine_Refactored.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,39 +20,79 @@ namespace CoffeeMachine_Refactored.Controllers
         private List<Ingredient> SodaIngredients;
         private Soda? soda;
 
+        private List<Ingredient> TeaIngredients;
+        private Tea? tea;
+
         private int userOption = 0;
 
 
-        private void addAllIngredientsToTheList(List<Ingredient> list)
+        private void addAllIngredientsToTheList(BeverageType type, List<Ingredient> list)
         {
-
-            foreach (int ingredients in Enum.GetValues(typeof(CoffeeIngredientsType)))
+            switch (type)
             {
-                list.Add(new Ingredient((CoffeeIngredientsType)ingredients));
+                case BeverageType.Coffee:
+                    foreach (int ingredients in Enum.GetValues(typeof(CoffeeIngredientsType)))
+                    {
+                        list.Add(new Ingredient((CoffeeIngredientsType)ingredients));
 
+                    }
+                    break;
+                case BeverageType.Soda:
+                    foreach (int ingredients in Enum.GetValues(typeof(SodaType)))
+                    {
+                        list.Add(new Ingredient((SodaType)ingredients));
+
+                    }
+                    break;
+                case BeverageType.Tea:
+                    foreach (int ingredients in Enum.GetValues(typeof(TeaIngredientsType)))
+                    {
+                        list.Add(new Ingredient((TeaIngredientsType)ingredients));
+
+                    }
+                    break;
             }
 
-            foreach (int ingredients in Enum.GetValues(typeof(SodaType)))
-            {
-                list.Add(new Ingredient((CoffeeIngredientsType)ingredients));
 
-            }
+
         }
 
         public BeverageProccessor()
         {
             CoffeeIngredients = new List<Ingredient>();
             SodaIngredients = new List<Ingredient>();
+            TeaIngredients = new List<Ingredient>();
 
-            addAllIngredientsToTheList(CoffeeIngredients);
+            addAllIngredientsToTheList(BeverageType.Coffee, CoffeeIngredients);
+            addAllIngredientsToTheList(BeverageType.Soda, SodaIngredients);
+            addAllIngredientsToTheList(BeverageType.Tea, TeaIngredients);
         }
 
         public void showActualIngredientAmount()
         {
-            foreach (Ingredient i in CoffeeIngredients)
+            switch (userOption)
             {
-                Console.WriteLine(i.ActualAmount);
+                case 1:
+                    foreach (Ingredient i in CoffeeIngredients)
+                    {
+                        Console.WriteLine(i.CoffeeType + " " + i.ActualAmount);
+                    }
+                    break;
+                case 2:
+                    foreach (Ingredient i in SodaIngredients)
+                    {
+                        Console.WriteLine(i.SodaType + " " + i.ActualAmount);
+                    }
+                    break;
+                case 3:
+                    foreach (Ingredient i in TeaIngredients)
+                    {
+                        Console.WriteLine(i.TeaType + " " + i.ActualAmount);
+                    }
+                    break;
+
             }
+
         }
 
         private void CheckForIngredients(Ingredient ingredient, SizeType size)
@@ -60,19 +102,19 @@ namespace CoffeeMachine_Refactored.Controllers
                 case SizeType.Small:
                     if (ingredient.ActualAmount < 1)
                     {
-                        throw new IngredientNotFoundException(ingredient.IngredientType.ToString(), size.ToString().ToLower());
+                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
                     }
                     break;
                 case SizeType.Medium:
                     if (ingredient.ActualAmount < 2)
                     {
-                        throw new IngredientNotFoundException(ingredient.IngredientType.ToString(), size.ToString().ToLower());
+                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
                     }
                     break;
                 case SizeType.Large:
                     if (ingredient.ActualAmount < 3)
                     {
-                        throw new IngredientNotFoundException(ingredient.IngredientType.ToString(), size.ToString().ToLower());
+                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
                     }
                     break;
             }
@@ -97,7 +139,8 @@ namespace CoffeeMachine_Refactored.Controllers
         {
             Console.WriteLine("What drink would you like?\n" +
                 "1. Coffee\n" +
-                "2. Soda");
+                "2. Soda\n" +
+                "3. Tea");
 
             userOption = int.Parse(Console.ReadLine());
 
@@ -112,8 +155,14 @@ namespace CoffeeMachine_Refactored.Controllers
               "3.Fanta\n" +
               "4.Sprite";
 
+            string askForTea = "Please insert the number of the tea you want:\n" +
+              "1.Mint\n" +
+              "2.ForestFruit\n" +
+              "3.Chamoile";
+
             var coffeeType = CoffeeType.Espresso;
             var sodaType = SodaType.Fanta;
+            var teaType = TeaType.Mint;
 
             switch (userOption)
             {
@@ -131,7 +180,16 @@ namespace CoffeeMachine_Refactored.Controllers
                     if (int.TryParse(Console.ReadLine(), out var sodaChoise))
                     {
 
-                        coffeeType = (CoffeeType)sodaChoise;
+                        sodaType = (SodaType)sodaChoise;
+
+                    }
+                    break;
+                case 3:
+                    Console.WriteLine(askForTea);
+                    if (int.TryParse(Console.ReadLine(), out var teaChoise))
+                    {
+
+                        teaType = (TeaType)teaChoise;
 
                     }
                     break;
@@ -153,6 +211,7 @@ namespace CoffeeMachine_Refactored.Controllers
             {
                 case 1: coffee = new Coffee(coffeeType, size); break;
                 case 2: soda = new Soda(sodaType, size); break;
+                case 3: tea = new Tea(teaType, size); break;
             }
 
 
@@ -164,6 +223,7 @@ namespace CoffeeMachine_Refactored.Controllers
             {
                 case 1: coffee.GetReceipt(); break;
                 case 2: soda.GetReceipt(); break;
+                case 3: tea.GetReceipt(); break;
             }
 
         }
@@ -182,6 +242,9 @@ namespace CoffeeMachine_Refactored.Controllers
                 case 2:
                     Console.Write("Your " + soda.SizeType + "  " + soda.SodaType + " will be " + price + " lei. Please insert the amount: ");
                     break;
+                case 3:
+                    Console.Write("Your " + tea.SizeType + "  " + tea.TeaType + " will be " + price + " lei. Please insert the amount: ");
+                    break;
             }
 
             do
@@ -199,6 +262,7 @@ namespace CoffeeMachine_Refactored.Controllers
 
             } while (price > paidAmount);
 
+
         }
 
         public double GetPrice()
@@ -207,6 +271,7 @@ namespace CoffeeMachine_Refactored.Controllers
             {
                 case 1: return coffee.BeveragePrice(); break;
                 case 2: return soda.BeveragePrice(); break;
+                case 3: return tea.BeveragePrice(); break;
             }
 
             return 0;
@@ -215,17 +280,60 @@ namespace CoffeeMachine_Refactored.Controllers
 
         public void Pour()
         {
+            int index = -1;
+            List<CoffeeIngredientsType> c = new List<CoffeeIngredientsType>();
+            List<TeaIngredientsType> t = new List<TeaIngredientsType>();
+            List<SodaType> s = new List<SodaType>();
+
+
             switch (userOption)
             {
                 case 1:
-                    foreach (CoffeeIngredientsType ingredientNeeded in coffee.Ingredients)
+
+                    c = coffee.GetNedeedIngredients();
+                    break;
+
+                case 2:
+
+                    s = soda.GetNedeedIngredients();
+                    break;
+                case 3:
+
+                    t = tea.GetNedeedIngredients();
+
+                    break;
+            }
+
+
+            switch (userOption)
+            {
+
+                case 1:
+
+                    foreach (CoffeeIngredientsType ingredientNeeded in c)
                     {
-                        int index = CoffeeIngredients.FindIndex(x => x.IngredientType.Equals(ingredientNeeded));
+                        index = CoffeeIngredients.FindIndex(x => x.CoffeeType.Equals(ingredientNeeded));
+
                         UpdateIngredientAmount(CoffeeIngredients[index], coffee.SizeType);
                     }
+
                     break;
                 case 2:
-                    UpdateIngredientAmount(CoffeeIngredients[0], coffee.SizeType);
+                    foreach (SodaType ingredientNeeded in s)
+                    {
+                        index = SodaIngredients.FindIndex(x => x.SodaType.Equals(ingredientNeeded));
+
+                        UpdateIngredientAmount(SodaIngredients[index], soda.SizeType);
+                    }
+                    break;
+                case 3:
+                    foreach (TeaIngredientsType ingredientNeeded in t)
+                    {
+                        index = TeaIngredients.FindIndex(x => x.TeaType.Equals(ingredientNeeded));
+
+                        UpdateIngredientAmount(TeaIngredients[index], tea.SizeType);
+                    }
+
                     break;
             }
 

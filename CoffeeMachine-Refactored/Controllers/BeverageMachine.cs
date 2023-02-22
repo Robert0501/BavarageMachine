@@ -33,6 +33,7 @@ namespace CoffeeMachine_Refactored.Controllers
             _beverageProcessor.GetReceipt();
             _beverageProcessor.AskForPayment();
             _beverageProcessor.Pour();
+            _beverageProcessor.showActualIngredientAmount();
 
         }
 

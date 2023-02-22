@@ -1,4 +1,5 @@
 ﻿using CoffeeMachine_Refactored.Enums;
+using CoffeeMachine_Refactored.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,26 +14,34 @@ namespace CoffeeMachine_Refactored.Models
 
         private int _actualAmount;
         public int ActualAmount { get { return _actualAmount; } set { _actualAmount = value; } }
-        public CoffeeIngredientsType IngredientType;
-        public SodaType sodaType;
+        public CoffeeIngredientsType CoffeeType;
+        public SodaType SodaType;
+        public TeaIngredientsType TeaType;
 
+       
         public Ingredient(CoffeeIngredientsType ingredientType)
         {
             ActualAmount = MAX_AMOUNT;
-            this.IngredientType = ingredientType;
+            this.CoffeeType = ingredientType;
         }
 
         public Ingredient(SodaType sodaType)
         {
             ActualAmount = MAX_AMOUNT;
-            this.sodaType = sodaType;
+            this.SodaType = sodaType;
+        }
+
+        public Ingredient(TeaIngredientsType teaType)
+        {
+            ActualAmount = MAX_AMOUNT;
+            this.TeaType = teaType;
         }
 
         public void FillIngredient()
         {
-            ActualAmount= MAX_AMOUNT;
+            ActualAmount = MAX_AMOUNT;
         }
 
-       
+
     }
 }

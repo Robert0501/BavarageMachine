@@ -12,6 +12,7 @@ namespace CoffeeMachine_Refactored.Models
 {
     public class Soda : IBeverage
     {
+
         private SodaType _sodaType;
         public SodaType SodaType { get { return _sodaType; } set { _sodaType = value; } }
 
@@ -22,6 +23,8 @@ namespace CoffeeMachine_Refactored.Models
         public SizeType SizeType { get { return _sizeType; } set { _sizeType = value; } }
 
         public List<SodaType> Ingredients;
+
+
         public Soda()
         {
             Ingredients = new List<SodaType>();
@@ -29,7 +32,7 @@ namespace CoffeeMachine_Refactored.Models
 
         public Soda(SodaType sodaType, SizeType size)
         {
-            this.BasePrice = 5;
+            this.BasePrice = 10;
             _sodaType = sodaType;
             _sizeType = size;
             Ingredients = new List<SodaType>();
@@ -61,7 +64,7 @@ namespace CoffeeMachine_Refactored.Models
             var neededIngredients = new List<SodaType>();
             foreach (SodaType ingredient in Ingredients)
             {
-                neededIngredients.Append(ingredient);
+                neededIngredients.Add(ingredient);
             }
 
             return neededIngredients;
