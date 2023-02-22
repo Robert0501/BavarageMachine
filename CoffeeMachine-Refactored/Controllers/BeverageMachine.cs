@@ -13,33 +13,30 @@ namespace CoffeeMachine_Refactored.Controllers
 {
     public class BeverageMachine
     {
-        IMachineProcessor _coffeeProccessor;
-        IMachineProcessor _sodaProccessor;
+        IBeverageProcessor _beverageProcessor;
+  
 
-        public BeverageMachine(IMachineProcessor beverageProcessor, IMachineProcessor sodaProccessor)
+        public BeverageMachine(IBeverageProcessor beverageProcessor)
         {
-            _coffeeProccessor = beverageProcessor;
-            _sodaProccessor = sodaProccessor;
+            _beverageProcessor = beverageProcessor;
+           
         }
 
         public BeverageMachine()
         {
-            _coffeeProccessor = new BeverageProccessor(BeverageType.Coffee);
-            _sodaProccessor = new BeverageProccessor(BeverageType.Soda);
+            _beverageProcessor = new BeverageProccessor();
         }
 
-        public void PourCoffee()
+        public void Pour()
         {
-
-
-            _coffeeProccessor.PourBeverage(BeverageType.Coffee);
+            _beverageProcessor.AskForBeverage();
+            _beverageProcessor.GetReceipt();
+            _beverageProcessor.AskForPayment();
+            _beverageProcessor.Pour();
 
         }
 
-        public void PourSoda()
-        {
-            _sodaProccessor.PourBeverage(BeverageType.Soda);
-        }
+        
 
     }
 }

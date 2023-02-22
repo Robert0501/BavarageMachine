@@ -12,5 +12,6 @@ namespace CoffeeMachine_Refactored.Interfaces
         void Pour();
         void AskForBeverage();
         void AskForPayment();
+        void GetReceipt();
     }
 }
