@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace CoffeeMachine_Refactored.Models
 {
-    internal class Ingredient
+    public class Ingredient
     {
         private readonly int MAX_AMOUNT = 20;
 
         private int _actualAmount;
         public int ActualAmount { get { return _actualAmount; } set { _actualAmount = value; } }
-        public IngredientsType IngredientType;
+        public CoffeeIngredientsType IngredientType;
 
-        public Ingredient(IngredientsType ingredientType)
+        public Ingredient(CoffeeIngredientsType ingredientType)
         {
             ActualAmount = MAX_AMOUNT;
             this.IngredientType = ingredientType;
