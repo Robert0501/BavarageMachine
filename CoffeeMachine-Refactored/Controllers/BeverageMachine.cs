@@ -14,12 +14,11 @@ namespace CoffeeMachine_Refactored.Controllers
     public class BeverageMachine
     {
         IBeverageProcessor _beverageProcessor;
-  
+
 
         public BeverageMachine(IBeverageProcessor beverageProcessor)
         {
             _beverageProcessor = beverageProcessor;
-           
         }
 
         public BeverageMachine()
@@ -33,11 +32,7 @@ namespace CoffeeMachine_Refactored.Controllers
             _beverageProcessor.GetReceipt();
             _beverageProcessor.AskForPayment();
             _beverageProcessor.Pour();
-            _beverageProcessor.showActualIngredientAmount();
-
         }
-
-        
 
     }
 }

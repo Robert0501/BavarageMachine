@@ -5,6 +5,7 @@ using CoffeeMachine_Refactored.Interfaces;
 using CoffeeMachine_Refactored.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -95,6 +96,16 @@ namespace CoffeeMachine_Refactored.Controllers
 
         }
 
+        private void ThrowErrorIfTheIngredientIsNotFound(Ingredient ingredient, SizeType size)
+        {
+            switch (userOption)
+            {
+                case 1: throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
+                case 2: throw new IngredientNotFoundException(ingredient.SodaType.ToString(), size.ToString().ToLower());
+                case 3: throw new IngredientNotFoundException(ingredient.TeaType.ToString(), size.ToString().ToLower());
+            }
+        }
+
         private void CheckForIngredients(Ingredient ingredient, SizeType size)
         {
             switch (size)
@@ -102,19 +113,20 @@ namespace CoffeeMachine_Refactored.Controllers
                 case SizeType.Small:
                     if (ingredient.ActualAmount < 1)
                     {
-                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
+
+                        ThrowErrorIfTheIngredientIsNotFound(ingredient, size);
                     }
                     break;
                 case SizeType.Medium:
                     if (ingredient.ActualAmount < 2)
                     {
-                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
+                        ThrowErrorIfTheIngredientIsNotFound(ingredient, size);
                     }
                     break;
                 case SizeType.Large:
                     if (ingredient.ActualAmount < 3)
                     {
-                        throw new IngredientNotFoundException(ingredient.CoffeeType.ToString(), size.ToString().ToLower());
+                        ThrowErrorIfTheIngredientIsNotFound(ingredient, size);
                     }
                     break;
             }
@@ -281,25 +293,25 @@ namespace CoffeeMachine_Refactored.Controllers
         public void Pour()
         {
             int index = -1;
-            List<CoffeeIngredientsType> c = new List<CoffeeIngredientsType>();
-            List<TeaIngredientsType> t = new List<TeaIngredientsType>();
-            List<SodaType> s = new List<SodaType>();
+            List<CoffeeIngredientsType> coffeeNeededIngredients = new List<CoffeeIngredientsType>();
+            List<TeaIngredientsType> teaNeededIngredients = new List<TeaIngredientsType>();
+            List<SodaType> odaNeededIngredients = new List<SodaType>();
 
 
             switch (userOption)
             {
                 case 1:
 
-                    c = coffee.GetNedeedIngredients();
+                    coffeeNeededIngredients = coffee.GetNedeedIngredients();
                     break;
 
                 case 2:
 
-                    s = soda.GetNedeedIngredients();
+                    odaNeededIngredients = soda.GetNedeedIngredients();
                     break;
                 case 3:
 
-                    t = tea.GetNedeedIngredients();
+                    teaNeededIngredients = tea.GetNedeedIngredients();
 
                     break;
             }
@@ -310,7 +322,7 @@ namespace CoffeeMachine_Refactored.Controllers
 
                 case 1:
 
-                    foreach (CoffeeIngredientsType ingredientNeeded in c)
+                    foreach (CoffeeIngredientsType ingredientNeeded in coffeeNeededIngredients)
                     {
                         index = CoffeeIngredients.FindIndex(x => x.CoffeeType.Equals(ingredientNeeded));
 
@@ -319,7 +331,7 @@ namespace CoffeeMachine_Refactored.Controllers
 
                     break;
                 case 2:
-                    foreach (SodaType ingredientNeeded in s)
+                    foreach (SodaType ingredientNeeded in odaNeededIngredients)
                     {
                         index = SodaIngredients.FindIndex(x => x.SodaType.Equals(ingredientNeeded));
 
@@ -327,7 +339,7 @@ namespace CoffeeMachine_Refactored.Controllers
                     }
                     break;
                 case 3:
-                    foreach (TeaIngredientsType ingredientNeeded in t)
+                    foreach (TeaIngredientsType ingredientNeeded in teaNeededIngredients)
                     {
                         index = TeaIngredients.FindIndex(x => x.TeaType.Equals(ingredientNeeded));
 
