@@ -39,6 +39,12 @@ namespace CoffeeMachine_Refactored.Models
             Ingredients = new List<CoffeeIngredientsType>();
         }
 
+        public double BeveragePrice()
+        {
+            int numberOfIngredients = GetUsedIngredientsNumber();
+            return this.BasePrice + (0.1 * BasePrice * numberOfIngredients * (double)this.SizeType);
+        }
+
         public void GetReceipt()
         {
             switch (CoffeeType)
@@ -81,11 +87,7 @@ namespace CoffeeMachine_Refactored.Models
             return this.Ingredients.Count();
         }
 
-        public double BeveragePrice()
-        {
-            int numberOfIngredients = GetUsedIngredientsNumber();
-            return this.BasePrice + (0.1 * BasePrice * numberOfIngredients * (double)this.SizeType);
-        }
+       
 
         public override string ToString()
         {
